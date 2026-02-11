@@ -7,9 +7,14 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
-    application
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
+    java
+    war
 }
+
+group = "org.example"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -17,19 +22,26 @@ repositories {
 }
 
 dependencies {
-    // This dependency is used by the application.
-    implementation(libs.guava)
+    // Use the Spring Boot Starter for building web applications, including RESTful applications using Spring MVC. Uses Tomcat as the default embedded container
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.validation)
+
+    implementation(libs.spring.boot.starter.data.jpa)
+
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+
+    runtimeOnly(libs.h2)
+
+    // Use the Spring Boot Starter Test for testing Spring Boot applications with libraries including JUnit Jupiter, Hamcrest and Mockito.
+    testImplementation(libs.spring.boot.starter.test)
 }
 
-testing {
-    suites {
-        // Configure the built-in test suite
-        val test by getting(JvmTestSuite::class) {
-            // Use JUnit Jupiter test framework
-            useJUnitJupiter("5.12.1")
-        }
-    }
+tasks.test {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
 }
+
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
@@ -38,7 +50,10 @@ java {
     }
 }
 
-application {
-    // Define the main class for the application.
-    mainClass = "org.example.App"
+springBoot {
+    mainClass.set("org.example.App")
+}
+
+tasks.jar {
+    enabled = false
 }
