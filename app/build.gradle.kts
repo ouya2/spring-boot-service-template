@@ -57,3 +57,8 @@ springBoot {
 tasks.jar {
     enabled = false
 }
+
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    val profile = System.getenv("SPRING_PROFILES_ACTIVE") ?: "local"
+    systemProperty("spring.profiles.active", profile)
+}

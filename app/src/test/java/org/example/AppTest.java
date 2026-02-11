@@ -4,13 +4,18 @@
 package org.example;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.ActiveProfiles;
 
-import java.beans.Transient;
-
-@SpringBootTest
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@ActiveProfiles("test")
 class AppTest {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     @Test
     void contextLoads() {
