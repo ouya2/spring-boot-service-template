@@ -5,3 +5,8 @@ management:
         enabled: true
       show-details: always
       ssl-enabled: true
+
+logging:
+  level:
+    org.apache.coyote.http11: INFO
+    org.apache.tomcat.util.net: INFO
