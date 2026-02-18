@@ -18,13 +18,13 @@ import jakarta.servlet.http.HttpServletResponse;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorrelationIdFilter extends HttpFilter {
 
-    private static final String HEADER = "X-Correlation-Id";
+    public static final String CORRELATION_ID_HEADER = "X-Correlation-Id";
     private static final String MDC_CORRELATTION_ID_KEY= "correlationId";
 
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String correlationId = request.getHeader(HEADER);
+        String correlationId = request.getHeader(CORRELATION_ID_HEADER);
         if (correlationId == null || correlationId.isEmpty()) {
             correlationId = UUID.randomUUID().toString();
         } else {
@@ -32,11 +32,11 @@ public class CorrelationIdFilter extends HttpFilter {
         }
         
         MDC.put("correlationId", correlationId);
-        response.setHeader(MDC_CORRELATTION_ID_KEY, correlationId);
+        response.setHeader(CORRELATION_ID_HEADER, correlationId);
         try {
             filterChain.doFilter(request, response);
         } finally {
-            MDC.remove("MDC_CORRELATTION_ID_KEY");
+            MDC.remove(MDC_CORRELATTION_ID_KEY);
         }
     }
 
